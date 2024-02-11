@@ -1,0 +1,53 @@
+@tailwind utilities;
+
+:root {
+  --white: #fff;
+  --black: #000;
+  --primary-300: #f5f9ff;
+  --primary-400: #c2d8ff;
+  --primary-400b: #3d71f5;
+  --primary-500: #1355ff;
+  --primary-600: #0133b7;
+  --primary-700: #061237;
+  --primary-800: #081b49;
+  --primary-2-300: #f5f9ff;
+  --primary-2-400: #d7eeff;
+  --primary-2-500: #205eff;
+  --primary-2-600: #0133b7;
+  --primary-2-700: #0c286e;
+  --slate-300: #67718e;
+  --slate-400: #37456c;
+  --slate-500: #18264e;
+  --slate-600: #0b1a46;
+  --slate-700: #061237;
+  --neutral-100: #e5e5e5;
+  --neutral-200: #e7eaee;
+  --neutral-400: #acb4c3;
+  --neutral-600: #586174;
+  --neutral-700: #3c4353;
+  --neutral-900: #07090d;
+  --gray-100: #f7f9fc;
+  --gray-200: #f2f3f8;
+  --gray-300: #dadde7;
+  --gray-400: #b6bcce;
+  --gray-500: #6b7094;
+  --gray-700: #282556;
+  --gray-900: #160042;
+  --title-color: #111827;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400; /* Regular */
+  src: url("fonts/Inter-Regular") format("ttf");
+}
+
+body {
+  font-family: Inter, sans-serif;
+}
+
+* {
+  font-family: inherit;
+  box-sizing: border-box;
+}

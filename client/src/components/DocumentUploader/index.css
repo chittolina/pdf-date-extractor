@@ -1,0 +1,49 @@
+.document-uploader {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+  width: 600px;
+  height: 500px;
+}
+
+.document-uploader-helper-input {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+}
+
+.document-uploader-selected-files {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.document-uploader-drag-drop {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border: 2px dashed var(--primary-500);
+  border-radius: 10px;
+  color: var(--primary-500);
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+}
+
+.document-uploader-drag-drop-container {
+  position: relative;
+  width: 100%;
+}

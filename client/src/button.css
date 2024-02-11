@@ -1,0 +1,36 @@
+.button {
+  position: relative;
+  background-color: var(--primary-500);
+  color: var(--white);
+  border: 1px solid transparent;
+  padding: 7px 16px;
+  letter-spacing: -0.09px;
+  min-width: 150px;
+
+  align-items: center;
+  border-radius: 35px;
+  box-shadow: none !important;
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 500;
+  justify-content: center;
+  line-height: 1.7148;
+
+  font-size: 14px;
+
+  transition-duration: 0.3s;
+  transition-property: all;
+  transition-timing-function: ease;
+
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--white);
+  border-color: var(--primary-500);
+  color: var(--primary-500);
+
+  transition-duration: 0.3s;
+  transition-property: all;
+  transition-timing-function: ease;
+}
