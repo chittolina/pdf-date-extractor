@@ -6,10 +6,10 @@ def parse_pdf(pdf_path: str) -> ParsedPDF:
   reader = open_pdf(pdf_path)
   metadata = extract_metadata(reader)
   text = extract_full_text(reader)
-  form_fields_values = extract_form_values(reader)
+  form_values = extract_form_values(reader)
 
   file_name = pdf_path.split('/')[-1]
-  parsed_pdf = ParsedPDF(file_name, metadata, text, form_fields_values)
+  parsed_pdf = ParsedPDF(file_name, metadata, text, form_values)
 
   return parsed_pdf
 

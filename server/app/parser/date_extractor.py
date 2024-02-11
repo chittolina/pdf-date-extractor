@@ -34,11 +34,11 @@ def dates_from_pdf_text(pdf: ParsedPDF) -> list[str]:
   return matches
 
 def dates_from_pdf_form_values(pdf: ParsedPDF) -> list[str]:
-  form_fields_values = pdf.form_fields_values
+  form_values = pdf.form_values
   matches = []
 
   for rule in extraction_rules:
-    for value in form_fields_values:
+    for value in form_values:
       if value is not None:
         for match in re.finditer(rule, value):
           parsed_date = parser.parse(match.group(0))
