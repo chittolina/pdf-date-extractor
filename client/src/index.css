@@ -36,6 +36,10 @@
   --title-color: #111827;
 }
 
+.root {
+  max-width: 600px;
+}
+
 @font-face {
   font-family: "Inter";
   font-style: normal;

@@ -1,56 +1,104 @@
-import React, { useState, useEffect } from "react";
-
-import DocumentUploader from "../DocumentUploader/DocumentUploader";
+import React, { useEffect, useState } from "react";
+import { createPopper } from "@popperjs/core";
+import documentsService from "../../services/documents";
+import DocumentSelector from "../DocumentSelector/DocumentSelector";
 import ExtractedDatesCalendar from "../ExtractedDatesCalendar/ExtractedDatesCalendar";
+import Button from "../Button/Button";
+import ErrorAlert from "../ErrorAlert/ErrorAlert";
+import "./index.css";
 
+export interface ExtractedDate {
+  date: Date;
+  snippet: string;
+}
 export interface ExtractedDocument {
   file_name: string;
   title: string;
-  extracted_dates: Array<{
-    date: Date;
-    snippet: string;
-  }>;
+  link: string;
+  extracted_dates: ExtractedDate[];
 }
 
 const DocumentExtractor = () => {
-  const [hasSelectedFiles, setHasSelectedFiles] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const [selectedDocuments, setSelectedDocuments] = useState<File[]>([]);
+  const [extractedCount, setExtractedCount] = useState<{
+    [fileName: string]: number;
+  }>({});
   const [extractedDocuments, setExtractedDocuments] = useState<
     ExtractedDocument[]
   >([]);
 
   const handleSubmit = async (files: File[]) => {
+    setHasError(false);
+    setIsLoading(true);
+
     const formData = new FormData();
     for (const file of files) {
       formData.append("files", file);
     }
 
     try {
-      const res = await fetch("http://localhost:8000/documents/extract", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-      setExtractedDocuments(data);
+      const extractedDocuments =
+        await documentsService.extractDatesFromDocuments(formData);
+      setExtractedDocuments(extractedDocuments);
     } catch (err) {
-      console.log(err);
+      setHasError(true);
     }
+
+    setIsLoading(false);
   };
 
-  console.log(extractedDocuments);
+  useEffect(() => {
+    parseExtractCount(extractedDocuments);
+  }, [extractedDocuments]);
+
+  const parseExtractCount = (extractedDocuments: ExtractedDocument[]) => {
+    const extractedCount: { [key: string]: number } = {};
+
+    extractedDocuments.forEach((doc) => {
+      extractedCount[doc.file_name] = doc.extracted_dates.length;
+    });
+
+    setExtractedCount(extractedCount);
+  };
+
   return (
-    <div className="app-container">
-      <DocumentUploader
-        onSubmit={(files: File[]) => {
-          handleSubmit(files);
-        }}
-        onFilesChanged={(files: File[]) => {
-          setHasSelectedFiles(files.length > 0);
-        }}
-      />
-      {extractedDocuments.length > 0 && (
-        <ExtractedDatesCalendar extractedDocuments={extractedDocuments} />
-      )}
+    <div className="document-extractor-container">
+      <div>
+        <DocumentSelector
+          extractedCount={extractedCount}
+          onSubmit={(files: File[]) => {
+            handleSubmit(files);
+          }}
+          onFilesChanged={(files: File[]) => {
+            setSelectedDocuments(files);
+          }}
+        />
+        <div className="w-full">
+          {selectedDocuments.length > 0 && (
+            <Button
+              isLoading={isLoading}
+              className="w-full my-4"
+              onClick={() => handleSubmit(selectedDocuments)}
+            >
+              {isLoading ? "Extracting dates..." : "Extract dates"}
+            </Button>
+          )}
+          {hasError && (
+            <ErrorAlert
+              text="Something went wrong. Please try again."
+              className="mt-5 px-5"
+            />
+          )}
+          {!hasError && extractedDocuments.length > 0 && (
+            <div className="mt-24">
+              <ExtractedDatesCalendar extractedDocuments={extractedDocuments} />
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

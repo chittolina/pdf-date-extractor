@@ -1,11 +1,10 @@
 .document-uploader {
   position: relative;
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   margin: 20px 0;
-  width: 600px;
-  height: 500px;
 }
 
 .document-uploader-helper-input {

@@ -6,6 +6,10 @@
   padding: 20px;
 }
 
+.react-calendar button {
+  overflow: visible !important;
+}
+
 .react-calendar__tile {
   position: relative;
   overflow: visible;

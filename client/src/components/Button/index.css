@@ -34,3 +34,15 @@
   transition-property: all;
   transition-timing-function: ease;
 }
+
+.button.inverted {
+  border: 1px solid var(--primary-500);
+  background-color: var(--white);
+  border-color: var(--primary-500);
+  color: var(--primary-500);
+}
+
+.button.inverted:hover {
+  background-color: var(--primary-500);
+  color: var(--white);
+}
