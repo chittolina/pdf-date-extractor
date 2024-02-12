@@ -4,12 +4,6 @@ from app.models.parsed_pdf import ParsedPDF
 from app.models.extracted_date import ExtractedDate
 
 
-# extraction_rules = [
-#   r'(\d{1,2}/\d{1,2}/\d{4})',
-#   r'(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})',
-#   r'^(January|February|March|April|May|June|July|August|September|October|November|December) [0-3]?[0-9], [0-9]{4}$'
-# ]
-
 extraction_rules = re.compile(
     r'\b(?:'
     r'\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|'  # MM/DD/YYYY or MM-DD-YYYY
@@ -35,13 +29,6 @@ def dates_from_pdf_text(pdf: ParsedPDF) -> list[str]:
   text = remove_trailing_spaces(pdf.text)
   print(text)
   matches = []
-
-  # for rule in extraction_rules:
-  #   for match in re.finditer(rule, text):
-  #     parsed_date = parser.parse(match.group(0))
-  #     snippet = '...' + text[match.start() - 20 : match.end() + 20] + '...'
-  #     snippet = snippet.replace('\n', ' ')
-  #     matches.append(ExtractedDate(parsed_date, snippet))
   
   for match in re.finditer(extraction_rules, text):
     parsed_date = parser.parse(match.group(0))
@@ -53,13 +40,6 @@ def dates_from_pdf_text(pdf: ParsedPDF) -> list[str]:
 def dates_from_pdf_form_values(pdf: ParsedPDF) -> list[str]:
   form_values = pdf.form_values
   matches = []
-
-  # for rule in extraction_rules:
-  #   for value in form_values:
-  #     if value is not None:
-  #       for match in re.finditer(rule, value):
-  #         parsed_date = parser.parse(match.group(0))
-  #         matches.append(ExtractedDate(parsed_date, None))
   
   for value in form_values:
     if value is not None:
