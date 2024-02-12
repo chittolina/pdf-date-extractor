@@ -56,7 +56,7 @@ const DocumentSelector = ({ onFilesChanged, extractedCount }: Props) => {
 
             {selectedFiles.map((file) => (
               <div key={file.name} className="flex justify-between">
-                <span>{file.name}</span>
+                <span className="document-name">{file.name}</span>
                 <span className="text-sm font-bold">
                   {extractedCount?.[file.name] !== undefined &&
                     getExtractedCountLabel(extractedCount?.[file.name])}
