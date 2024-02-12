@@ -29,26 +29,25 @@ Extract date from the full text of the PDF.
 
 
 def dates_from_pdf_text(pdf: ParsedPDF) -> list[str]:
-    # text = remove_trailing_spaces(pdf.text)
-    text = pdf.text
+    text = remove_trailing_spaces(pdf.text)
     matches = []
 
     for match in re.finditer(extraction_rules, text):
         parsed_date = parser.parse(match.group(0))
-        snippet = text[match.start() - 20 : match.end() + 20]
+        text_snippet = text[match.start() - 20 : match.end() + 20]
+        extracted_snippet = None
 
-        if len(snippet) == 0:
-            matches.append(ExtractedDate(parsed_date, None))
-        else:
-            highlight_start = snippet.find(match.group(0))
+        if len(text_snippet) != 0:
+            # Highlight the matched date in the text snippet
+            highlight_start = text_snippet.find(match.group(0))
             highlight_end = highlight_start + len(match.group(0))
-            snippet = snippet.replace("\n", " ")
-            matches.append(
-                ExtractedDate(
-                    parsed_date,
-                    ExtractedDateSnippet(snippet, highlight_start, highlight_end),
-                )
+            text_snippet = text_snippet.replace("\n", " ")
+
+            extracted_snippet = ExtractedDateSnippet(
+                text_snippet, highlight_start, highlight_end
             )
+
+        matches.append(ExtractedDate(parsed_date, extracted_snippet))
 
     return matches
 
