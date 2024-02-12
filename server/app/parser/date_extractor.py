@@ -1,7 +1,7 @@
 import re
 from dateutil import parser
 from app.models.parsed_pdf import ParsedPDF
-from app.models.extracted_date import ExtractedDate
+from app.models.extracted_date import ExtractedDate, ExtractedDateSnippet
 
 
 extraction_rules = re.compile(
@@ -14,29 +14,36 @@ extraction_rules = re.compile(
     re.IGNORECASE
 )
 
-def remove_trailing_spaces(text):
-  cleaned_text = re.sub(r'^\s+|\s+$', '', text)
-  cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
-  return cleaned_text
-
 def dates_from_pdf(pdf: ParsedPDF) -> list[str]:
   dates_from_text = dates_from_pdf_text(pdf)
   dates_from_form_values = dates_from_pdf_form_values(pdf)
 
   return dates_from_text + dates_from_form_values
 
+"""
+Extract date from the full text of the PDF.
+"""
 def dates_from_pdf_text(pdf: ParsedPDF) -> list[str]:
   text = remove_trailing_spaces(pdf.text)
-  print(text)
   matches = []
   
   for match in re.finditer(extraction_rules, text):
     parsed_date = parser.parse(match.group(0))
-    snippet = '...' + text[match.start() - 20 : match.end() + 20] + '...'
-    snippet = snippet.replace('\n', ' ')
-    matches.append(ExtractedDate(parsed_date, snippet))
+    snippet = text[match.start() - 20 : match.end() + 20]
+
+    if len(snippet) == 0:
+      matches.append(ExtractedDate(parsed_date, None))
+    else:
+      highlight_start = snippet.find(match.group(0))
+      highlight_end = highlight_start + len(match.group(0))
+      snippet = snippet.replace('\n', ' ')
+      matches.append(ExtractedDate(parsed_date, ExtractedDateSnippet(snippet, highlight_start, highlight_end)))
+
   return matches
 
+"""
+Extract date from filled form values in the PDF.
+"""
 def dates_from_pdf_form_values(pdf: ParsedPDF) -> list[str]:
   form_values = pdf.form_values
   matches = []
@@ -47,6 +54,15 @@ def dates_from_pdf_form_values(pdf: ParsedPDF) -> list[str]:
         parsed_date = parser.parse(match.group(0))
         matches.append(ExtractedDate(parsed_date, None))
   return matches
+
+
+"""
+Remove trailing spaces and replace multiple spaces with a single space.
+"""
+def remove_trailing_spaces(text):
+  cleaned_text = re.sub(r'^\s+|\s+$', '', text)
+  cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
+  return cleaned_text
 
 
 

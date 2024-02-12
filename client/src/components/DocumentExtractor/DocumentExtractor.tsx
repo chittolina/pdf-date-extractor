@@ -6,9 +6,14 @@ import Button from "../Button/Button";
 import ErrorAlert from "../ErrorAlert/ErrorAlert";
 import "./index.css";
 
+export interface ExtractedDateSnippet {
+  text: string;
+  highlight_start: number;
+  highlight_end: number;
+}
 export interface ExtractedDate {
   date: Date;
-  snippet: string;
+  snippet?: ExtractedDateSnippet;
 }
 export interface ExtractedDocument {
   file_name: string;

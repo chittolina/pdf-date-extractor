@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { isSameDay } from "../../utils/date";
-import { ExtractedDocument } from "../DocumentExtractor/DocumentExtractor";
+import {
+  ExtractedDateSnippet,
+  ExtractedDocument,
+} from "../DocumentExtractor/DocumentExtractor";
 import "./ExtractedDatesCalendar.css";
 import Button from "../Button/Button";
 import ExtractedDateModal from "./ExtractedDateModal";
@@ -16,7 +19,7 @@ const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
   const [currentOpenModal, setCurrentOpenModal] = useState<string>("");
   const [modalDetails, setModalDetails] = useState<{
     title: string;
-    snippet: string;
+    snippet?: ExtractedDateSnippet;
     link: string;
   } | null>(null);
 
@@ -78,7 +81,7 @@ const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
 
     setModalDetails({
       title: document.title,
-      snippet: extractedDate?.snippet || "No snippet found.",
+      snippet: extractedDate?.snippet,
       link: document.link,
     });
   };
@@ -112,7 +115,7 @@ const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
                     <ExtractedDateModal
                       isOpen={currentOpenModal === getModalOpenKey(date)}
                       title={modalDetails?.title || ""}
-                      snippet={modalDetails?.snippet || ""}
+                      snippet={modalDetails?.snippet}
                       link={modalDetails?.link || ""}
                     />
                   </div>
