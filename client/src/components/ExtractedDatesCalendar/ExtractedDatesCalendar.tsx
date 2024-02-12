@@ -3,10 +3,9 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { isSameDay } from "../../utils/date";
 import { ExtractedDocument } from "../DocumentExtractor/DocumentExtractor";
-import Popover from "../Popover/Popover";
-import "./index.css";
+import "./ExtractedDatesCalendar.css";
 import Button from "../Button/Button";
-import config from "../../config";
+import ExtractedDateModal from "./ExtractedDateModal";
 
 interface Props {
   extractedDocuments: ExtractedDocument[];
@@ -14,8 +13,8 @@ interface Props {
 }
 const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
-  const [isDetailPopoverOpen, setIsDetailPopoverOpen] = useState<string>("");
-  const [popoverDetails, setPopoverDetails] = useState<{
+  const [currentOpenModal, setCurrentOpenModal] = useState<string>("");
+  const [modalDetails, setModalDetails] = useState<{
     title: string;
     snippet: string;
     link: string;
@@ -39,7 +38,7 @@ const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
       return;
     }
     const oldestDate = dates.sort((a, b) => a.getTime() - b.getTime())[0];
-    setIsDetailPopoverOpen("");
+    setCurrentOpenModal("");
     setCurrentDate(oldestDate);
   };
 
@@ -49,7 +48,7 @@ const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
       return;
     }
     const latestDate = dates.sort((a, b) => b.getTime() - a.getTime())[0];
-    setIsDetailPopoverOpen("");
+    setCurrentOpenModal("");
     setCurrentDate(latestDate);
   };
 
@@ -62,7 +61,7 @@ const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
     return dates;
   };
 
-  const updateHoveredExtraction = (activeStartDate: Date) => {
+  const updateModalDetails = (activeStartDate: Date) => {
     const document = extractedDocuments.find((doc) => {
       return doc.extracted_dates.some((extraction) => {
         return isSameDay(new Date(extraction.date), activeStartDate);
@@ -77,12 +76,15 @@ const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
       return isSameDay(new Date(extraction.date), activeStartDate);
     });
 
-    setPopoverDetails({
+    setModalDetails({
       title: document.title,
       snippet: extractedDate?.snippet || "No snippet found.",
       link: document.link,
     });
   };
+
+  const getModalOpenKey = (date: Date) =>
+    `${date.getMonth()}-${date.getDate()}`;
 
   return (
     <>
@@ -98,40 +100,21 @@ const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
                 return (
                   <div
                     className="w-full h-full absolute top-0 left-0 text-black"
-                    onMouseOver={() => {
-                      updateHoveredExtraction(date);
-                      setIsDetailPopoverOpen(
-                        `${date.getMonth()}-${date.getDate()}`
+                    onClick={() => {
+                      setCurrentOpenModal(
+                        currentOpenModal === getModalOpenKey(date)
+                          ? ""
+                          : getModalOpenKey(date)
                       );
-                    }}
-                    onMouseOut={() => {
-                      setIsDetailPopoverOpen("");
-                      setPopoverDetails(null);
+                      updateModalDetails(date);
                     }}
                   >
-                    {isDetailPopoverOpen ===
-                      `${date.getMonth()}-${date.getDate()}` &&
-                      popoverDetails && (
-                        <Popover>
-                          <div className="flex items-start flex-col">
-                            <h4 className="mb-2">{popoverDetails.title}</h4>
-                            <span className="mb-6">
-                              {popoverDetails.snippet}
-                            </span>
-                          </div>
-                          <Button
-                            inverted
-                            onClick={() => {
-                              window.open(
-                                `${config.server}${popoverDetails.link}`,
-                                "_blank"
-                              );
-                            }}
-                          >
-                            View PDF
-                          </Button>
-                        </Popover>
-                      )}
+                    <ExtractedDateModal
+                      isOpen={currentOpenModal === getModalOpenKey(date)}
+                      title={modalDetails?.title || ""}
+                      snippet={modalDetails?.snippet || ""}
+                      link={modalDetails?.link || ""}
+                    />
                   </div>
                 );
               }

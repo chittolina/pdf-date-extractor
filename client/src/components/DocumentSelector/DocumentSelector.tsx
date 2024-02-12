@@ -32,7 +32,6 @@ const DocumentSelector = ({ onFilesChanged, extractedCount }: Props) => {
   return (
     <div className="document-uploader">
       <h2 className="mb-30">Select your documents</h2>
-
       <div className="document-uploader-drag-drop-container">
         <Dropzone
           onDropAccepted={handleFileDrop}
