@@ -76,8 +76,6 @@ Remove trailing spaces and replace multiple spaces with a single space.
 
 
 def remove_trailing_spaces(text):
-    # cleaned_text = re.sub(r'^\s+|\s+$', '', text)
-    # cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
     cleaned_text = " ".join(text.split())
     cleaned_text = re.sub(r"\s+", " ", cleaned_text)
     return cleaned_text
