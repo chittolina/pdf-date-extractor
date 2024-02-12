@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Dropzone from "react-dropzone";
-import "./index.css";
+import "./DocumentSelector.css";
 
 interface Props {
   extractedCount?: { [key: string]: number };
@@ -8,7 +8,7 @@ interface Props {
   onFilesChanged: (files: File[]) => void;
 }
 
-const DocumentSelector = ({ onFilesChanged, extractedCount }: Props) => {
+export const DocumentSelector = ({ onFilesChanged, extractedCount }: Props) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const handleFileDrop = (acceptedFiles: File[]) => {
@@ -31,16 +31,19 @@ const DocumentSelector = ({ onFilesChanged, extractedCount }: Props) => {
 
   return (
     <div className="document-uploader">
-      <h2 className="mb-30">Select your documents</h2>
+      <h2 className="mb-30">Select documents to extract dates from</h2>
       <div className="document-uploader-drag-drop-container">
         <Dropzone
           onDropAccepted={handleFileDrop}
           accept={{ "application/pdf": [".pdf"] }}
+          maxFiles={5}
         >
           {({ getRootProps, getInputProps }) => (
             <div className="document-uploader-drag-drop" {...getRootProps()}>
               <p>Click here to select files or drag and drop.</p>
-              <p>*Only PDF files are allowed.</p>
+              <p className="text-xs">
+                *Only PDF files are allowed. Up to 5 files.
+              </p>
               <input
                 className="document-uploader-helper-input"
                 {...getInputProps()}
@@ -49,27 +52,26 @@ const DocumentSelector = ({ onFilesChanged, extractedCount }: Props) => {
           )}
         </Dropzone>
 
-        {selectedFiles.length > 0 && (
-          <section className="document-uploader-selected-files">
-            <h4 className="mt-2">Selected documents</h4>
+        <section className="document-uploader-selected-files">
+          {selectedFiles.length === 0 && (
+            <h4 className="mt-2">No files selected.</h4>
+          )}
+          {selectedFiles.length > 0 && <h4 className="mt-2">Documents</h4>}
 
-            {selectedFiles.map((file) => (
-              <div
-                key={file.name}
-                className="flex justify-between whitespace-nowrap"
-              >
-                <span className="document-name">{file.name}</span>
-                <span className="text-sm font-bold">
-                  {extractedCount?.[file.name] !== undefined &&
-                    getExtractedCountLabel(extractedCount?.[file.name])}
-                </span>
-              </div>
-            ))}
-          </section>
-        )}
+          {selectedFiles.map((file) => (
+            <div
+              key={file.name}
+              className="flex justify-between whitespace-nowrap mb-1"
+            >
+              <span className="document-uploader-file-name">{file.name}</span>
+              <span className="text-sm font-bold">
+                {extractedCount?.[file.name] !== undefined &&
+                  getExtractedCountLabel(extractedCount?.[file.name])}
+              </span>
+            </div>
+          ))}
+        </section>
       </div>
     </div>
   );
 };
-
-export default DocumentSelector;

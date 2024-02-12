@@ -3,7 +3,7 @@ interface Props {
   className?: string;
 }
 
-const ErrorAlert = ({ text, className }: Props) => {
+export const ErrorAlert = ({ text, className }: Props) => {
   return (
     <div
       className={`${
@@ -15,5 +15,3 @@ const ErrorAlert = ({ text, className }: Props) => {
     </div>
   );
 };
-
-export default ErrorAlert;

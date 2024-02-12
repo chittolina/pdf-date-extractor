@@ -1,17 +1,19 @@
 import React from "react";
-import "./index.css";
+import "./Button.css";
 import Spinner from "./Spinner";
 
 interface Props {
   children: React.ReactNode;
+  disabled?: boolean;
   inverted?: boolean;
   isLoading?: boolean;
   className?: string;
   onClick?: () => void;
 }
 
-const Button = ({
+export const Button = ({
   children,
+  disabled = false,
   isLoading = false,
   inverted = false,
   onClick,
@@ -25,12 +27,20 @@ const Button = ({
     if (inverted) {
       generatedClassName += " inverted";
     }
+    if (isLoading) {
+      generatedClassName += " loading";
+    }
+
     return generatedClassName;
   };
   return (
     <button
       className={generateClassName()}
-      onClick={onClick}
+      onClick={() => {
+        if (!disabled) {
+          onClick && onClick();
+        }
+      }}
       style={{ pointerEvents: isLoading ? "none" : "all" }}
     >
       {isLoading && <Spinner />}
@@ -38,5 +48,3 @@ const Button = ({
     </button>
   );
 };
-
-export default Button;

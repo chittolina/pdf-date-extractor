@@ -1,5 +1,5 @@
 import { Modal } from "antd";
-import Button from "../Button/Button";
+import { Button } from "../";
 import config from "../../config";
 import "./ExtractedDateModal.css";
 import { ExtractedDateSnippet } from "../DocumentExtractor/DocumentExtractor";
@@ -11,7 +11,7 @@ interface Props {
   snippet?: ExtractedDateSnippet;
 }
 
-const ExtractedDateModal = ({ isOpen, title, link, snippet }: Props) => {
+export const ExtractedDateModal = ({ isOpen, title, link, snippet }: Props) => {
   const getHighlightedText = (snippet: ExtractedDateSnippet) => {
     const leftSide = snippet.text.slice(0, snippet.highlight_start);
     const rightSide = snippet.text.slice(snippet.highlight_end);
@@ -30,7 +30,12 @@ const ExtractedDateModal = ({ isOpen, title, link, snippet }: Props) => {
   };
 
   return (
-    <Modal open={isOpen} centered footer={null} className="modal">
+    <Modal
+      centered
+      open={isOpen}
+      footer={null}
+      className="extracted-date-modal"
+    >
       <div className="flex flex-col items-center">
         <div className="flex items-start flex-col w-full">
           <h4 className="mb-2">{title}</h4>
@@ -54,5 +59,3 @@ const ExtractedDateModal = ({ isOpen, title, link, snippet }: Props) => {
     </Modal>
   );
 };
-
-export default ExtractedDateModal;

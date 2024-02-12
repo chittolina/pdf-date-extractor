@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import documentsService from "../../services/documents";
-import DocumentSelector from "../DocumentSelector/DocumentSelector";
-import ExtractedDatesCalendar from "../ExtractedDatesCalendar/ExtractedDatesCalendar";
-import Button from "../Button/Button";
-import ErrorAlert from "../ErrorAlert/ErrorAlert";
-import "./index.css";
+import { DocumentSelector } from "../DocumentSelector/index";
+import { ExtractedDatesCalendar } from "../ExtractedDatesCalendar";
+import { Button } from "../Button";
+import { ErrorAlert } from "../ErrorAlert";
+import "./DocumentExtractor.css";
 
 export interface ExtractedDateSnippet {
   text: string;
@@ -22,7 +22,7 @@ export interface ExtractedDocument {
   extracted_dates: ExtractedDate[];
 }
 
-const DocumentExtractor = () => {
+export const DocumentExtractor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -55,10 +55,10 @@ const DocumentExtractor = () => {
   };
 
   useEffect(() => {
-    parseExtractCount(extractedDocuments);
+    calculateExtractedCount(extractedDocuments);
   }, [extractedDocuments]);
 
-  const parseExtractCount = (extractedDocuments: ExtractedDocument[]) => {
+  const calculateExtractedCount = (extractedDocuments: ExtractedDocument[]) => {
     const extractedCount: { [key: string]: number } = {};
 
     extractedDocuments.forEach((doc) => {
@@ -81,23 +81,22 @@ const DocumentExtractor = () => {
           }}
         />
         <div className="w-full">
-          {selectedDocuments.length > 0 && (
-            <Button
-              isLoading={isLoading}
-              className="w-full my-4"
-              onClick={() => handleSubmit(selectedDocuments)}
-            >
-              {isLoading ? "Extracting dates..." : "Extract dates"}
-            </Button>
-          )}
+          <Button
+            disabled={selectedDocuments.length === 0}
+            isLoading={isLoading}
+            className="w-full my-4"
+            onClick={() => handleSubmit(selectedDocuments)}
+          >
+            {isLoading ? "Extracting dates..." : "Extract dates"}
+          </Button>
           {hasError && (
             <ErrorAlert
               text="Something went wrong. Please try again."
               className="mt-5 px-5"
             />
           )}
-          {!hasError && extractedDocuments.length > 0 && (
-            <div className="mt-24">
+          {extractedDocuments.length > 0 && (
+            <div className="mt-12">
               <ExtractedDatesCalendar extractedDocuments={extractedDocuments} />
             </div>
           )}

@@ -2,19 +2,19 @@ import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { isSameDay } from "../../utils/date";
+import "./ExtractedDatesCalendar.css";
 import {
+  Button,
   ExtractedDateSnippet,
   ExtractedDocument,
-} from "../DocumentExtractor/DocumentExtractor";
-import "./ExtractedDatesCalendar.css";
-import Button from "../Button/Button";
-import ExtractedDateModal from "./ExtractedDateModal";
+  ExtractedDateModal,
+} from "../";
 
 interface Props {
   extractedDocuments: ExtractedDocument[];
-  isLoading?: boolean;
 }
-const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
+
+export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const [currentOpenModal, setCurrentOpenModal] = useState<string>("");
   const [modalDetails, setModalDetails] = useState<{
@@ -91,56 +91,51 @@ const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
 
   return (
     <>
-      {currentDate && (
-        <>
-          <Calendar
-            locale="en-US"
-            // Workaround to force re-render (see https://github.com/wix/react-native-calendars/issues/1450)
-            key={currentDate + ""}
-            value={currentDate}
-            tileContent={({ date }) => {
-              if (hasMatchingExtractedDate(date)) {
-                return (
-                  <div
-                    className="w-full h-full absolute top-0 left-0 text-black"
-                    onClick={() => {
-                      setCurrentOpenModal(
-                        currentOpenModal === getModalOpenKey(date)
-                          ? ""
-                          : getModalOpenKey(date)
-                      );
-                      updateModalDetails(date);
-                    }}
-                  >
-                    <ExtractedDateModal
-                      isOpen={currentOpenModal === getModalOpenKey(date)}
-                      title={modalDetails?.title || ""}
-                      snippet={modalDetails?.snippet}
-                      link={modalDetails?.link || ""}
-                    />
-                  </div>
-                );
-              }
-            }}
-            tileClassName={(activeStartDate) => {
-              if (hasMatchingExtractedDate(activeStartDate.date)) {
-                return "react-calendar__tile--active";
-              }
-            }}
-          ></Calendar>
-
-          <div className="flex mt-6">
-            <Button className="w-1/2" onClick={jumpToOldest}>
-              Jump to oldest
-            </Button>
-            <Button className="w-1/2 ml-2" onClick={jumpToLatest}>
-              Jump to latest
-            </Button>
-          </div>
-        </>
-      )}
+      <>
+        <Calendar
+          locale="en-US"
+          // Workaround to force re-render (see https://github.com/wix/react-native-calendars/issues/1450)
+          key={currentDate + ""}
+          value={currentDate}
+          tileContent={({ date }) => {
+            if (hasMatchingExtractedDate(date)) {
+              return (
+                <div
+                  className="w-full h-full absolute top-0 left-0 text-black"
+                  onClick={() => {
+                    setCurrentOpenModal(
+                      currentOpenModal === getModalOpenKey(date)
+                        ? ""
+                        : getModalOpenKey(date)
+                    );
+                    updateModalDetails(date);
+                  }}
+                >
+                  <ExtractedDateModal
+                    isOpen={currentOpenModal === getModalOpenKey(date)}
+                    title={modalDetails?.title || ""}
+                    snippet={modalDetails?.snippet}
+                    link={modalDetails?.link || ""}
+                  />
+                </div>
+              );
+            }
+          }}
+          tileClassName={(activeStartDate) => {
+            if (hasMatchingExtractedDate(activeStartDate.date)) {
+              return "react-calendar__tile--active";
+            }
+          }}
+        ></Calendar>
+        <div className="flex mt-6">
+          <Button className="w-1/2" onClick={jumpToOldest}>
+            Jump to oldest
+          </Button>
+          <Button className="w-1/2 ml-2" onClick={jumpToLatest}>
+            Jump to latest
+          </Button>
+        </div>
+      </>
     </>
   );
 };
-
-export default ExtractedDatesCalendar;
