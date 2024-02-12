@@ -33,8 +33,6 @@ def dates_from_pdf_text(pdf: ParsedPDF) -> list[str]:
     text = pdf.text
     matches = []
 
-    print(text)
-
     for match in re.finditer(extraction_rules, text):
         parsed_date = parser.parse(match.group(0))
         snippet = text[match.start() - 20 : match.end() + 20]
