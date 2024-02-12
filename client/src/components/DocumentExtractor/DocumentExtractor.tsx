@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { createPopper } from "@popperjs/core";
+import { useEffect, useState } from "react";
 import documentsService from "../../services/documents";
 import DocumentSelector from "../DocumentSelector/DocumentSelector";
 import ExtractedDatesCalendar from "../ExtractedDatesCalendar/ExtractedDatesCalendar";

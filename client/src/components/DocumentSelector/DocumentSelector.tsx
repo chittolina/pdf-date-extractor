@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Dropzone from "react-dropzone";
 import "./index.css";
 
@@ -57,11 +57,12 @@ const DocumentSelector = ({ onFilesChanged, extractedCount }: Props) => {
             {selectedFiles.map((file) => (
               <div key={file.name} className="flex justify-between">
                 <span>{file.name}</span>
-                {extractedCount?.[file.name] >= 0 && (
-                  <span className="text-sm font-bold">
-                    {getExtractedCountLabel(extractedCount[file.name])}
-                  </span>
-                )}
+                {extractedCount?.[file.name] &&
+                  extractedCount[file.name] >= 0 && (
+                    <span className="text-sm font-bold">
+                      {getExtractedCountLabel(extractedCount[file.name])}
+                    </span>
+                  )}
               </div>
             ))}
           </section>

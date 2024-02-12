@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-// import { Popover, PopoverTrigger } from "@nextui-org/react";
 import { isSameDay } from "../../utils/date";
 import { ExtractedDocument } from "../DocumentExtractor/DocumentExtractor";
 import Popover from "../Popover/Popover";
@@ -39,8 +38,8 @@ const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
     if (dates.length === 0) {
       return;
     }
-    const oldestDate = new Date(Math.min(...dates));
-    setIsDetailPopoverOpen(false);
+    const oldestDate = dates.sort((a, b) => a.getTime() - b.getTime())[0];
+    setIsDetailPopoverOpen("");
     setCurrentDate(oldestDate);
   };
 
@@ -49,9 +48,9 @@ const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
     if (dates.length === 0) {
       return;
     }
-    const newestDate = new Date(Math.max(...dates));
-    setIsDetailPopoverOpen(false);
-    setCurrentDate(newestDate);
+    const latestDate = dates.sort((a, b) => b.getTime() - a.getTime())[0];
+    setIsDetailPopoverOpen("");
+    setCurrentDate(latestDate);
   };
 
   const getFlattenedDates = () => {
