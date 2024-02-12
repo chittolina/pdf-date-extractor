@@ -8,7 +8,6 @@ interface Props {
   title: string;
   link: string;
   snippet?: string;
-  onClose: () => void;
 }
 
 const ExtractedDateModal = ({ isOpen, title, link, snippet }: Props) => {
