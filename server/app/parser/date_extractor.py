@@ -5,64 +5,81 @@ from app.models.extracted_date import ExtractedDate, ExtractedDateSnippet
 
 
 extraction_rules = re.compile(
-    r'\b(?:'
-    r'\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|'  # MM/DD/YYYY or MM-DD-YYYY
-    r'\d{2,4}[/-]\d{1,2}[/-]\d{1,2}|'  # YYYY/MM/DD or YYYY-MM-DD
-    r'(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{1,2},? \d{4}|'  # Month Day, Year
-    r'\d{1,2} (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{4}'
-    r')\b',
-    re.IGNORECASE
+    r"\b(?:"
+    r"\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|"  # MM/DD/YYYY or MM-DD-YYYY
+    r"\d{2,4}[/-]\d{1,2}[/-]\d{1,2}|"  # YYYY/MM/DD or YYYY-MM-DD
+    # Month Day, Year
+    r"(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{1,2},? \d{4}|"
+    r"\d{1,2} (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{4}"
+    r")\b",
+    re.IGNORECASE,
 )
 
-def dates_from_pdf(pdf: ParsedPDF) -> list[str]:
-  dates_from_text = dates_from_pdf_text(pdf)
-  dates_from_form_values = dates_from_pdf_form_values(pdf)
 
-  return dates_from_text + dates_from_form_values
+def dates_from_pdf(pdf: ParsedPDF) -> list[str]:
+    dates_from_text = dates_from_pdf_text(pdf)
+    dates_from_form_values = dates_from_pdf_form_values(pdf)
+
+    return dates_from_text + dates_from_form_values
+
 
 """
 Extract date from the full text of the PDF.
 """
+
+
 def dates_from_pdf_text(pdf: ParsedPDF) -> list[str]:
-  text = remove_trailing_spaces(pdf.text)
-  matches = []
-  
-  for match in re.finditer(extraction_rules, text):
-    parsed_date = parser.parse(match.group(0))
-    snippet = text[match.start() - 20 : match.end() + 20]
+    # text = remove_trailing_spaces(pdf.text)
+    text = pdf.text
+    matches = []
 
-    if len(snippet) == 0:
-      matches.append(ExtractedDate(parsed_date, None))
-    else:
-      highlight_start = snippet.find(match.group(0))
-      highlight_end = highlight_start + len(match.group(0))
-      snippet = snippet.replace('\n', ' ')
-      matches.append(ExtractedDate(parsed_date, ExtractedDateSnippet(snippet, highlight_start, highlight_end)))
+    print(text)
 
-  return matches
+    for match in re.finditer(extraction_rules, text):
+        parsed_date = parser.parse(match.group(0))
+        snippet = text[match.start() - 20 : match.end() + 20]
+
+        if len(snippet) == 0:
+            matches.append(ExtractedDate(parsed_date, None))
+        else:
+            highlight_start = snippet.find(match.group(0))
+            highlight_end = highlight_start + len(match.group(0))
+            snippet = snippet.replace("\n", " ")
+            matches.append(
+                ExtractedDate(
+                    parsed_date,
+                    ExtractedDateSnippet(snippet, highlight_start, highlight_end),
+                )
+            )
+
+    return matches
+
 
 """
 Extract date from filled form values in the PDF.
 """
+
+
 def dates_from_pdf_form_values(pdf: ParsedPDF) -> list[str]:
-  form_values = pdf.form_values
-  matches = []
-  
-  for value in form_values:
-    if value is not None:
-      for match in re.finditer(extraction_rules, value):
-        parsed_date = parser.parse(match.group(0))
-        matches.append(ExtractedDate(parsed_date, None))
-  return matches
+    form_values = pdf.form_values
+    matches = []
+
+    for value in form_values:
+        if value is not None:
+            for match in re.finditer(extraction_rules, value):
+                parsed_date = parser.parse(match.group(0))
+                matches.append(ExtractedDate(parsed_date, None))
+    return matches
 
 
 """
 Remove trailing spaces and replace multiple spaces with a single space.
 """
+
+
 def remove_trailing_spaces(text):
-  cleaned_text = re.sub(r'^\s+|\s+$', '', text)
-  cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
-  return cleaned_text
-
-
-
+    # cleaned_text = re.sub(r'^\s+|\s+$', '', text)
+    # cleaned_text = re.sub(r'\s+', ' ', cleaned_text)
+    cleaned_text = " ".join(text.split())
+    cleaned_text = re.sub(r"\s+", " ", cleaned_text)
+    return cleaned_text

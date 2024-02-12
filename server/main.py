@@ -8,16 +8,13 @@ app = FastAPI(
     title=settings.app_name,
     description=settings.app_description,
     version="0.1.0",
-    contact={
-        "name": settings.author_name,
-        "email": settings.author_email
-    }
+    contact={"name": settings.author_name, "email": settings.author_email},
 )
 
 app.mount(
-  f'/{settings.public_folder}', 
-  StaticFiles(directory=settings.public_folder), 
-  name=settings.public_folder
+    f"/{settings.public_folder}",
+    StaticFiles(directory=settings.public_folder),
+    name=settings.public_folder,
 )
 
 
