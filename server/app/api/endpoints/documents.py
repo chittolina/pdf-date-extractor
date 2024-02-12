@@ -21,6 +21,7 @@ async def upload_files(files: list[UploadFile]):
         extracted_documents.append({
             "file_name": parsed_pdf.file_name,
             "title": title,
+            "link": f'/{settings.public_folder}/{parsed_pdf.file_name}',
             "extracted_dates": extracted_data
         })
 
