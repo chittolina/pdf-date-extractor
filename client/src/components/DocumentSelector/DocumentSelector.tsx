@@ -55,7 +55,10 @@ const DocumentSelector = ({ onFilesChanged, extractedCount }: Props) => {
             <h4 className="mt-2">Selected documents</h4>
 
             {selectedFiles.map((file) => (
-              <div key={file.name} className="flex justify-between">
+              <div
+                key={file.name}
+                className="flex justify-between whitespace-nowrap"
+              >
                 <span className="document-name">{file.name}</span>
                 <span className="text-sm font-bold">
                   {extractedCount?.[file.name] !== undefined &&
