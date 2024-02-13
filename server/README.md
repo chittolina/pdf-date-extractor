@@ -7,7 +7,7 @@ This is the back-end folder of the PDF Date Extractor.
 ### Install dependencies using `pipenv`
 
 ```bash
-  pipenv install
+pipenv install
 ```
 
 ### Run the server
