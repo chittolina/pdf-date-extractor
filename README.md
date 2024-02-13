@@ -22,7 +22,9 @@ If you want to play around and get a quick demo, the app is deployed [here](http
 
 ## Getting Started 🏁
 
-### Backend Setup
+### Local development
+
+#### Backend Setup
 
 1. Install dependencies:
    ```bash
@@ -33,7 +35,7 @@ If you want to play around and get a quick demo, the app is deployed [here](http
    pipenv run uvicorn main:app
    ```
 
-### Frontend setup
+#### Frontend setup
 
 1. Install dependencies
    ```bash
