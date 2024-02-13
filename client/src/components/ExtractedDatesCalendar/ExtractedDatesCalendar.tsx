@@ -54,8 +54,6 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
       return;
     }
     const latestDate = dates.sort((a, b) => b.getTime() - a.getTime())[0];
-    const datesSorted = dates.sort((a, b) => b.getTime() - a.getTime());
-    console.log(datesSorted);
     setCurrentDate(latestDate);
   };
 
