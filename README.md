@@ -48,7 +48,7 @@ docker run -p 8000:8000 pdf-date-extractor
 
 #### Frontend setup
 
-### Run manually
+##### Run manually
 
 ```bash
 cd client
@@ -58,7 +58,7 @@ npm install
 npm run dev
 ```
 
-### Run as a docker container
+##### Run as a docker container
 
 ```bash
 cd client
