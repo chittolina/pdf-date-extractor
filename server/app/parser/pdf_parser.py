@@ -33,5 +33,5 @@ def extract_full_text(reader: PdfReader) -> str:
 
 def extract_form_values(reader: PdfReader) -> list[str]:
     fields = reader.get_form_text_fields()
-    values = [fields[field] for field in fields]
+    values = [fields[field] for field in fields if fields[field] is not None]
     return values
