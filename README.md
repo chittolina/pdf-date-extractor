@@ -29,6 +29,7 @@ If you want to play around and get a quick demo, the app is deployed [here](http
 ##### Run manually
 
 ```bash
+cd server
 # Install dependencies
 pipenv install
 # Run the server
@@ -50,6 +51,7 @@ docker run -p 8000:8000 pdf-date-extractor
 ### Run manually
 
 ```bash
+cd client
 # Install dependencies
 npm install
 # Run the app
