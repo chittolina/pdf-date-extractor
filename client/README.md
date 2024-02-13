@@ -19,5 +19,5 @@ npm run dev
 ### (Optional) Compile for deployment
 
 ```bash
-npm run compile
+npm run build
 ```

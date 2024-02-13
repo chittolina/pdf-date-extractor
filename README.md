@@ -47,7 +47,7 @@ If you want to play around and get a quick demo, the app is deployed [here](http
    ```
 3. (Optional) - Compilation
    ```bash
-   npm run compile
+   npm run build
    ```
 
 ## License 📜
