@@ -7,7 +7,7 @@ This is the front-end folder of the PDF date extractor.
 ### Install dependencies using `npm`
 
 ```bash
-  npm install
+npm install
 ```
 
 ### Run the server
