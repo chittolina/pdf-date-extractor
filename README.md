@@ -26,29 +26,45 @@ If you want to play around and get a quick demo, the app is deployed [here](http
 
 #### Backend Setup
 
-1. Install dependencies:
-   ```bash
-   pipenv install
-   ```
-2. Run the server:
-   ```bash
-   pipenv run uvicorn main:app
-   ```
+##### Run manually
+
+```bash
+# Install dependencies
+pipenv install
+# Run the server
+pipenv run uvicorn main:app
+```
+
+##### Run as a docker container
+
+```bash
+cd server
+# Build the image
+docker build -t pdf-date-extractor .
+# Run the container
+docker run -p 8000:8000 pdf-date-extractor
+```
 
 #### Frontend setup
 
-1. Install dependencies
-   ```bash
-   npm install
-   ```
-2. Run the server:
-   ```bash
-   npm run dev
-   ```
-3. (Optional) - Compilation
-   ```bash
-   npm run build
-   ```
+### Run manually
+
+```bash
+# Install dependencies
+npm install
+# Run the app
+npm run dev
+```
+
+### Run as a docker container
+
+```bash
+cd client
+# Build the image
+docker build -t pdf-date-extractor-client .
+# Run the container
+docker run -p 3000:3000 pdf-date-extractor-client
+```
 
 ## License 📜
 

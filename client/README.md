@@ -16,6 +16,15 @@ npm install
 npm run dev
 ```
 
+### Run as a docker container
+
+```bash
+# Build the image
+docker build -t pdf-date-extractor .
+# Run the container
+docker run -p 8000:8000 pdf-date-extractor
+```
+
 ### (Optional) Compile for deployment
 
 ```bash
