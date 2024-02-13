@@ -12,6 +12,8 @@ uvicorn = {extras = ["standard"], version = "*"}
 python-dateutil = "*"
 
 [dev-packages]
+httpx = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.12"
