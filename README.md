@@ -2,7 +2,7 @@
 
 Welcome to PDF Date Extractor! This tool helps you effortlessly extract dates from your PDF documents. It's powered by FastAPI on the backend and ReactJS on the frontend, making it a breeze to use.
 
-![App in action](app-in-action.png)
+<img src="app-in-action.png" alt="App in action" width="400">
 
 ## Demo ✨
 
