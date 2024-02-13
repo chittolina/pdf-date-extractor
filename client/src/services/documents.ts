@@ -1,3 +1,4 @@
+import { ExtractedDocument } from "../components";
 import config from "../config";
 
 const service = {
@@ -7,7 +8,18 @@ const service = {
       body: formData,
     });
 
-    const data = await res.json();
+    let data = await res.json();
+
+    // Convert dates to Date objects to simplify use across the board
+    data = data.map((doc: ExtractedDocument) => {
+      doc.extracted_dates = doc.extracted_dates.map((dateSnippet) => ({
+        ...dateSnippet,
+        date: new Date(dateSnippet.date),
+      }));
+
+      return doc;
+    });
+
     return data;
   },
 };
