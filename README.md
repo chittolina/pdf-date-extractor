@@ -18,7 +18,7 @@ If you want to play around and get a quick demo, the app is deployed [here](http
 
 1. **Access the Web Interface:** Visit [PDF Date Extractor](https://pdf-date-extractor.vercel.app/) in your browser.
 2. **Upload Your PDF:** Use the provided interface to upload your PDF file.
-3. **Instant Results:** Your extracted dates will be displayed on the webpage.
+3. **Instant Results:** Your extracted dates will be displayed on the calendar widget. Click on a extracted date to see it's text snippet and a link to the PDF.
 
 ## Getting Started 🏁
 
