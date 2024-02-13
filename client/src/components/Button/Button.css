@@ -32,6 +32,10 @@
   transition-timing-function: ease;
 }
 
+.button:hover svg {
+  color: var(--primary-500);
+}
+
 .button.inverted {
   border: 1px solid var(--primary-500);
   background-color: var(--white);
