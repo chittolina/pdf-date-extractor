@@ -16,7 +16,6 @@ interface Props {
 
 export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
-  const [currentOpenModal, setCurrentOpenModal] = useState<string>("");
   const [modalDetails, setModalDetails] = useState<{
     title: string;
     snippet?: ExtractedDateSnippet;
@@ -27,13 +26,18 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
     jumpToLatest();
   }, [extractedDocuments]);
 
-  const hasMatchingExtractedDate = (activeStartDate: Date) => {
-    return extractedDocuments.some((doc) => {
-      return doc.extracted_dates.some((extraction) => {
-        return isSameDay(new Date(extraction.date), activeStartDate);
-      });
-    });
-  };
+  useEffect(() => {
+    if (currentDate) {
+      updateModalDetails(currentDate);
+    }
+  }, [currentDate]);
+
+  const hasMatchingExtractedDate = (activeStartDate: Date) =>
+    extractedDocuments.some((doc) =>
+      doc.extracted_dates.some((extraction) =>
+        isSameDay(extraction.date, activeStartDate)
+      )
+    );
 
   const jumpToOldest = () => {
     const dates = getFlattenedDates();
@@ -41,7 +45,6 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
       return;
     }
     const oldestDate = dates.sort((a, b) => a.getTime() - b.getTime())[0];
-    setCurrentOpenModal("");
     setCurrentDate(oldestDate);
   };
 
@@ -51,7 +54,8 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
       return;
     }
     const latestDate = dates.sort((a, b) => b.getTime() - a.getTime())[0];
-    setCurrentOpenModal("");
+    const datesSorted = dates.sort((a, b) => b.getTime() - a.getTime());
+    console.log(datesSorted);
     setCurrentDate(latestDate);
   };
 
@@ -59,25 +63,24 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
     const extractedDates = extractedDocuments.flatMap(
       (doc) => doc.extracted_dates
     );
-    const dates = extractedDates.map((extraction) => new Date(extraction.date));
-
+    const dates = extractedDates.map((extraction) => extraction.date);
     return dates;
   };
 
   const updateModalDetails = (activeStartDate: Date) => {
-    const document = extractedDocuments.find((doc) => {
-      return doc.extracted_dates.some((extraction) => {
-        return isSameDay(new Date(extraction.date), activeStartDate);
-      });
-    });
+    const document = extractedDocuments.find((doc) =>
+      doc.extracted_dates.some((extraction) =>
+        isSameDay(extraction.date, activeStartDate)
+      )
+    );
 
     if (!document) {
       return;
     }
 
-    const extractedDate = document.extracted_dates.find((extraction) => {
-      return isSameDay(new Date(extraction.date), activeStartDate);
-    });
+    const extractedDate = document.extracted_dates.find((extraction) =>
+      isSameDay(extraction.date, activeStartDate)
+    );
 
     setModalDetails({
       title: document.title,
@@ -85,9 +88,6 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
       link: document.link,
     });
   };
-
-  const getModalOpenKey = (date: Date) =>
-    `${date.getMonth()}-${date.getDate()}`;
 
   return (
     <>
@@ -103,21 +103,9 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
                 <div
                   className="w-full h-full absolute top-0 left-0 text-black"
                   onClick={() => {
-                    setCurrentOpenModal(
-                      currentOpenModal === getModalOpenKey(date)
-                        ? ""
-                        : getModalOpenKey(date)
-                    );
                     updateModalDetails(date);
                   }}
-                >
-                  <ExtractedDateModal
-                    isOpen={currentOpenModal === getModalOpenKey(date)}
-                    title={modalDetails?.title || ""}
-                    snippet={modalDetails?.snippet}
-                    link={modalDetails?.link || ""}
-                  />
-                </div>
+                />
               );
             }
           }}
@@ -135,6 +123,16 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
             Jump to latest
           </Button>
         </div>
+
+        {modalDetails && (
+          <ExtractedDateModal
+            isOpen={!!modalDetails}
+            title={modalDetails?.title || ""}
+            snippet={modalDetails?.snippet}
+            link={modalDetails?.link || ""}
+            onCancel={() => setModalDetails(null)}
+          />
+        )}
       </>
     </>
   );

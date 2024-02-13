@@ -9,9 +9,16 @@ interface Props {
   title: string;
   link: string;
   snippet?: ExtractedDateSnippet;
+  onCancel?: () => void;
 }
 
-export const ExtractedDateModal = ({ isOpen, title, link, snippet }: Props) => {
+export const ExtractedDateModal = ({
+  isOpen,
+  title,
+  link,
+  snippet,
+  onCancel,
+}: Props) => {
   const getHighlightedText = (snippet: ExtractedDateSnippet) => {
     const leftSide = snippet.text.slice(0, snippet.highlight_start);
     const rightSide = snippet.text.slice(snippet.highlight_end);
@@ -35,6 +42,7 @@ export const ExtractedDateModal = ({ isOpen, title, link, snippet }: Props) => {
       open={isOpen}
       footer={null}
       className="extracted-date-modal"
+      onCancel={() => onCancel && onCancel()}
     >
       <div className="flex flex-col items-center">
         <div className="flex items-start flex-col w-full">

@@ -30,6 +30,10 @@
   background-color: var(--primary-500);
   color: var(--white);
 }
+.react-calendar
+  button:not(.react-calendar__tile--active, .react-calendar__tile--hasActive) {
+  color: var(--gray-600);
+}
 .react-calendar__tile:enabled:hover {
   background-color: var(--primary-300);
   color: var(--gray-600);
