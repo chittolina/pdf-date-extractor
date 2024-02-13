@@ -12,7 +12,7 @@ If you want to play around and get a quick demo, the app is deployed [here](http
 
 - **Easy Extraction:** Quickly extract dates from your PDF files.
 - **User-Friendly Interface:** An intuitive web interface for hassle-free PDF uploads. Either select them via browser file picker or drag and drop them!
-- **Clear Display:** View your extracted dates in a calendar widget with a link to the real PDF file.
+- **Clear Display:** View your extracted dates within a text snippet in a calendar widget with a link to the real PDF file.
 
 ## How to Use 📝
 
