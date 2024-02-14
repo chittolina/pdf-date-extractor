@@ -3,7 +3,7 @@ from app.models.parsed_pdf import ParsedPDF
 
 
 def parse_pdf(pdf_path: str) -> ParsedPDF:
-    reader = open_pdf(pdf_path)
+    reader = PdfReader(pdf_path)
     metadata = extract_metadata(reader)
     text = extract_full_text(reader)
     form_values = extract_form_values(reader)
@@ -12,12 +12,6 @@ def parse_pdf(pdf_path: str) -> ParsedPDF:
     parsed_pdf = ParsedPDF(file_name, metadata, text, form_values)
 
     return parsed_pdf
-
-
-def open_pdf(pdf_path: str) -> PdfReader:
-    # TODO: Properly close the PDF file
-    reader = PdfReader(pdf_path)
-    return reader
 
 
 def extract_metadata(reader: PdfReader) -> dict:
