@@ -9,11 +9,11 @@ router = APIRouter()
 @router.post("/extract")
 async def upload_files(files: list[UploadFile]):
     for file in files:
-        with open(f"{settings.public_folder}/{file.filename}", "wb") as output_file:
+        with open(f"{settings.uploads_folder}/{file.filename}", "wb") as output_file:
             output_file.write(file.file.read())
 
     parsed_pdfs = [
-        parse_pdf(f"{settings.public_folder}/{file.filename}") for file in files
+        parse_pdf(f"{settings.uploads_folder}/{file.filename}") for file in files
     ]
 
     extracted_documents = []
@@ -25,7 +25,7 @@ async def upload_files(files: list[UploadFile]):
             {
                 "file_name": parsed_pdf.file_name,
                 "title": title,
-                "link": f"/{settings.public_folder}/{parsed_pdf.file_name}",
+                "link": f"/{settings.uploads_folder}/{parsed_pdf.file_name}",
                 "extracted_dates": extracted_data,
             }
         )

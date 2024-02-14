@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     author_name: str = "Gabriel Chittolina"
     author_email: str = "gabrielchittolina1@gmail.com"
 
-    public_folder: str = "public"
+    uploads_folder: str = "uploads"
     origins: list[str] = ["*"]
 
 

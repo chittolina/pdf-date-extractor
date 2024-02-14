@@ -12,9 +12,9 @@ app = FastAPI(
 )
 
 app.mount(
-    f"/{settings.public_folder}",
-    StaticFiles(directory=settings.public_folder),
-    name=settings.public_folder,
+    f"/{settings.uploads_folder}",
+    StaticFiles(directory=settings.uploads_folder),
+    name=settings.uploads_folder,
 )
 
 

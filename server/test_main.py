@@ -36,7 +36,7 @@ expected_json = [
     {
         "file_name": "fw4.pdf",
         "title": "2020 Form W-4",
-        "link": "/public/fw4.pdf",
+        "link": "/uploads/fw4.pdf",
         "extracted_dates": [
             {
                 "date": "2021-02-16T00:00:00",
@@ -52,7 +52,7 @@ expected_json = [
     {
         "file_name": "ada_1pg.pdf",
         "title": "ada_1pg.pdf",
-        "link": "/public/ada_1pg.pdf",
+        "link": "/uploads/ada_1pg.pdf",
         "extracted_dates": [
             {"date": "2021-02-09T00:00:00", "snippet": None},
             {
@@ -92,7 +92,7 @@ expected_json = [
     {
         "file_name": "InsertMe.pdf",
         "title": "InsertMe.pdf",
-        "link": "/public/InsertMe.pdf",
+        "link": "/uploads/InsertMe.pdf",
         "extracted_dates": [
             {"date": "2020-11-11T00:00:00", "snippet": None},
             {
