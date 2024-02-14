@@ -2,20 +2,15 @@
 
 This is the back-end folder of the PDF Date Extractor.
 
+```bash
 app/
-├── api/
-│ ├── endpoints/
-│ │ ├── documents.py - Defines the routes for /documents
-│ │ └── documents_handler.py - Route handler to separate the logic
-│ └── api.py - Initializes the /documents router
-├── models/
-│ ├── extracted_date.py - Data model for extracted dates
-│ └── parsed_pdf.py - Data model for the parsed PDF (ParsedPDF). Library agnostic.
-└── parser/
-├── date_extractor.py - Functions to extract dates from the PDF.
-└── pdf_parser.py - Functions to parse the PDF into a ParsedPDF.
-examples - Sample PDFs for testing
-uploads - Uploaded files live here
+└── api/
+    ├── endpoints - Route definition and handlers
+    ├── models - Data models used in the API
+    └── parser - Functions for PDF Parsing and date extraction
+examples - Sample PDFs for testing.
+uploads - Uploaded files live here.
+```
 
 ## Local development
 
