@@ -18,6 +18,7 @@ extraction_rules = [
     r"(\d{1,2}\s+\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{4})",
 ]
 
+compiled_regex = re.compile("|".join(extraction_rules), re.IGNORECASE)
 
 def dates_from_pdf(pdf: ParsedPDF) -> list[str]:
     dates_from_text = dates_from_pdf_text(pdf)
@@ -26,61 +27,47 @@ def dates_from_pdf(pdf: ParsedPDF) -> list[str]:
     return dates_from_text + dates_from_form_values
 
 
-"""
-Extract date from the full text of the PDF.
-"""
-
-
 def dates_from_pdf_text(pdf: ParsedPDF) -> list[str]:
     text = remove_trailing_spaces(pdf.text)
     matches = []
 
-    for option in extraction_rules:
-        for match in re.finditer(option, text):
-            match_group = match.group(0)
+    for match in re.finditer(compiled_regex, text):
+        match_group = match.group(0)
 
-            if match_group == "" or match_group is None:
-                continue
+        if match_group == "" or match_group is None:
+            continue
 
-            parsed_date = None
+        parsed_date = None
 
-            try:
-                parsed_date = parser.parse(match_group)
-            except Exception:
-                continue
+        try:
+            parsed_date = parser.parse(match_group)
+        except Exception:
+            continue
 
-            text_snippet = text[match.start() - 20 : match.end() + 20]
-            extracted_snippet = None
+        text_snippet = text[match.start() - 20 : match.end() + 20]
+        extracted_snippet = None
 
-            if len(text_snippet) != 0:
-                # Highlight the matched date in the text snippet
-                highlight_start = text_snippet.find(match_group)
-                highlight_end = highlight_start + len(match_group)
-                text_snippet = text_snippet.replace("\n", " ")
+        if len(text_snippet) != 0:
+            start, end = highlight_indexes(text_snippet, match_group)
+            text_snippet = text_snippet.replace("\n", " ")
 
-                extracted_snippet = ExtractedDateSnippet(
-                    text_snippet, highlight_start, highlight_end
-                )
+            extracted_snippet = ExtractedDateSnippet(
+                text_snippet, start, end
+            )
 
-            matches.append(ExtractedDate(parsed_date, extracted_snippet))
+        matches.append(ExtractedDate(parsed_date, extracted_snippet))
 
     return matches
-
-
-"""
-Extract date from filled form values in the PDF.
-"""
 
 
 def dates_from_pdf_form_values(pdf: ParsedPDF) -> list[str]:
     form_values = pdf.form_values
     matches = []
 
-    for option in extraction_rules:
-        for value in form_values:
-            for match in re.finditer(option, value):
-                parsed_date = parser.parse(match.group(0))
-                matches.append(ExtractedDate(parsed_date, None))
+    for value in form_values:
+        for match in re.finditer(compiled_regex, value):
+            parsed_date = parser.parse(match.group(0))
+            matches.append(ExtractedDate(parsed_date, None))
 
     return matches
 
@@ -94,3 +81,13 @@ def remove_trailing_spaces(text):
     cleaned_text = " ".join(text.split())
     cleaned_text = re.sub(r"\s+", " ", cleaned_text)
     return cleaned_text
+
+
+"""
+Find the start and end indexes of the matched date in the text snippet.
+Used to show them in bold text in the frontend.
+"""
+def highlight_indexes(text, match):
+    start = text.find(match)
+    end = start + len(match)
+    return start, end
