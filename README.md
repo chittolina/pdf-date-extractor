@@ -21,13 +21,11 @@ If you want to play around and get a quick demo, the app is deployed [here](http
 2. **Upload Your PDF:** Use the provided interface to upload your PDF files.
 3. **Instant Results:** Your extracted dates will be displayed on the calendar widget. Click on a extracted date to see its text snippet and a link to the PDF.
 
-## Getting Started 🏁
+## Local development 🛠️
 
-### Local development
+### Backend Setup
 
-#### Backend Setup
-
-##### Run manually
+#### Run manually
 
 ```bash
 cd server
@@ -37,7 +35,7 @@ pipenv install
 pipenv run uvicorn main:app
 ```
 
-##### Run as a docker container
+#### Run as a docker container
 
 ```bash
 cd server
@@ -47,9 +45,9 @@ docker build -t pdf-date-extractor .
 docker run -p 8000:8000 pdf-date-extractor
 ```
 
-#### Frontend setup
+### Frontend setup
 
-##### Run manually
+#### Run manually
 
 ```bash
 cd client
@@ -59,7 +57,7 @@ npm install
 npm run dev
 ```
 
-##### Run as a docker container
+#### Run as a docker container
 
 ```bash
 cd client
