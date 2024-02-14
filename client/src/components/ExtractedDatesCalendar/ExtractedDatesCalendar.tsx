@@ -16,6 +16,7 @@ interface Props {
 
 export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalDetails, setModalDetails] = useState<{
     title: string;
     snippet?: ExtractedDateSnippet;
@@ -23,14 +24,14 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
   } | null>(null);
 
   useEffect(() => {
-    jumpToLatest();
-  }, [extractedDocuments]);
+    const latestExtractedDate = getLatestExtractedDate();
 
-  useEffect(() => {
-    if (currentDate) {
-      updateModalDetails(currentDate);
+    if (latestExtractedDate) {
+      setCurrentDate(latestExtractedDate);
+      updateModalDetails(latestExtractedDate);
+      setIsModalOpen(true);
     }
-  }, [currentDate]);
+  }, []);
 
   const hasMatchingExtractedDate = (activeStartDate: Date) =>
     extractedDocuments.some((doc) =>
@@ -39,25 +40,25 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
       )
     );
 
-  const jumpToOldest = () => {
-    const dates = getFlattenedDates();
+  const getOldestExtractedDate = () => {
+    const dates = getFlattenedExtractedDates();
     if (dates.length === 0) {
       return;
     }
     const oldestDate = dates.sort((a, b) => a.getTime() - b.getTime())[0];
-    setCurrentDate(oldestDate);
+    return oldestDate;
   };
 
-  const jumpToLatest = () => {
-    const dates = getFlattenedDates();
+  const getLatestExtractedDate = () => {
+    const dates = getFlattenedExtractedDates();
     if (dates.length === 0) {
       return;
     }
     const latestDate = dates.sort((a, b) => b.getTime() - a.getTime())[0];
-    setCurrentDate(latestDate);
+    return latestDate;
   };
 
-  const getFlattenedDates = () => {
+  const getFlattenedExtractedDates = () => {
     const extractedDates = extractedDocuments.flatMap(
       (doc) => doc.extracted_dates
     );
@@ -89,49 +90,64 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
 
   return (
     <>
-      <>
-        <Calendar
-          locale="en-US"
-          // Workaround to force re-render (see https://github.com/wix/react-native-calendars/issues/1450)
-          key={currentDate + ""}
-          value={currentDate}
-          tileContent={({ date }) => {
-            if (hasMatchingExtractedDate(date)) {
-              return (
-                <div
-                  className="w-full h-full absolute top-0 left-0 text-black"
-                  onClick={() => {
-                    updateModalDetails(date);
-                  }}
-                />
-              );
+      <Calendar
+        locale="en-US"
+        // Workaround to force re-render (see https://github.com/wix/react-native-calendars/issues/1450)
+        key={currentDate + ""}
+        value={currentDate}
+        tileContent={({ date }) => {
+          if (hasMatchingExtractedDate(date)) {
+            return (
+              <div
+                className="w-full h-full absolute top-0 left-0 text-black"
+                onClick={() => {
+                  updateModalDetails(date);
+                  setIsModalOpen(true);
+                }}
+              />
+            );
+          }
+        }}
+        tileClassName={(activeStartDate) => {
+          if (hasMatchingExtractedDate(activeStartDate.date)) {
+            return "react-calendar__tile--active";
+          }
+        }}
+      ></Calendar>
+      <div className="flex mt-6">
+        <Button
+          className="w-1/2"
+          onClick={() => {
+            const oldestDate = getOldestExtractedDate();
+            if (oldestDate) {
+              setCurrentDate(oldestDate);
             }
           }}
-          tileClassName={(activeStartDate) => {
-            if (hasMatchingExtractedDate(activeStartDate.date)) {
-              return "react-calendar__tile--active";
+        >
+          Jump to oldest
+        </Button>
+        <Button
+          className="w-1/2 ml-2"
+          onClick={() => {
+            const latestDate = getLatestExtractedDate();
+            if (latestDate) {
+              setCurrentDate(latestDate);
             }
           }}
-        ></Calendar>
-        <div className="flex mt-6">
-          <Button className="w-1/2" onClick={jumpToOldest}>
-            Jump to oldest
-          </Button>
-          <Button className="w-1/2 ml-2" onClick={jumpToLatest}>
-            Jump to latest
-          </Button>
-        </div>
+        >
+          Jump to latest
+        </Button>
+      </div>
 
-        {modalDetails && (
-          <ExtractedDateModal
-            isOpen={!!modalDetails}
-            title={modalDetails?.title || ""}
-            snippet={modalDetails?.snippet}
-            link={modalDetails?.link || ""}
-            onCancel={() => setModalDetails(null)}
-          />
-        )}
-      </>
+      {isModalOpen && modalDetails && (
+        <ExtractedDateModal
+          isOpen={!!modalDetails}
+          title={modalDetails?.title || ""}
+          snippet={modalDetails?.snippet}
+          link={modalDetails?.link || ""}
+          onCancel={() => setModalDetails(null)}
+        />
+      )}
     </>
   );
 };
