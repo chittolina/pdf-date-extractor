@@ -18,7 +18,7 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalDetails, setModalDetails] = useState<{
-    title: string;
+    file_name: string;
     snippet?: ExtractedDateSnippet;
     link: string;
   } | null>(null);
@@ -97,7 +97,7 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
     );
 
     setModalDetails({
-      title: document.title,
+      file_name: document.file_name,
       snippet: extractedDate?.snippet,
       link: document.link,
     });
@@ -157,7 +157,7 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
       {isModalOpen && modalDetails && (
         <ExtractedDateModal
           isOpen={!!modalDetails}
-          title={modalDetails?.title || ""}
+          title={modalDetails?.file_name || ""}
           snippet={modalDetails?.snippet}
           link={modalDetails?.link || ""}
           onCancel={() => setModalDetails(null)}
