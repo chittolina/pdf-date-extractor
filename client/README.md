@@ -2,6 +2,7 @@
 
 This is the front-end folder of the PDF date extractor.
 
+```bash
 src/
 ├── assets/
 │ └── fonts - Font used in the project
@@ -14,6 +15,7 @@ src/
 ├── services/
 │ └── documents - Abstraction wrapper around the /documents API
 └── utils - Utilitary functions
+```
 
 ## Local development
 
