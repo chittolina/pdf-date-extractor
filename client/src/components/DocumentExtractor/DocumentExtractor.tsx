@@ -38,14 +38,11 @@ export const DocumentExtractor = () => {
     setHasError(false);
     setIsLoading(true);
 
-    const formData = new FormData();
-    for (const file of files) {
-      formData.append("files", file);
-    }
+    const payload = buildSubmitRequestPayload(files);
 
     try {
       const extractedDocuments =
-        await documentsService.extractDatesFromDocuments(formData);
+        await documentsService.extractDatesFromDocuments(payload);
       setExtractedDocuments(extractedDocuments);
     } catch (err) {
       setHasError(true);
@@ -57,6 +54,21 @@ export const DocumentExtractor = () => {
   useEffect(() => {
     calculateExtractedCount(extractedDocuments);
   }, [extractedDocuments]);
+
+  useEffect(() => {
+    const remainingExtractedDocuments = extractedDocuments.filter((doc) =>
+      selectedDocuments.some((file) => file.name === doc.file_name)
+    );
+    setExtractedDocuments(remainingExtractedDocuments);
+  }, [selectedDocuments]);
+
+  const buildSubmitRequestPayload = (files: File[]) => {
+    const formData = new FormData();
+    for (const file of files) {
+      formData.append("files", file);
+    }
+    return formData;
+  };
 
   const calculateExtractedCount = (extractedDocuments: ExtractedDocument[]) => {
     const extractedCount: { [key: string]: number } = {};

@@ -24,14 +24,18 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
   } | null>(null);
 
   useEffect(() => {
+    openLatestExtractedDate();
+  }, []);
+
+  // Update current date when extracted documents change
+  // This will make sure the calendar re-renders when files are removed
+  useEffect(() => {
     const latestExtractedDate = getLatestExtractedDate();
 
     if (latestExtractedDate) {
       setCurrentDate(latestExtractedDate);
-      updateModalDetails(latestExtractedDate);
-      setIsModalOpen(true);
     }
-  }, []);
+  }, [extractedDocuments]);
 
   const hasMatchingExtractedDate = (activeStartDate: Date) =>
     extractedDocuments.some((doc) =>
@@ -39,6 +43,17 @@ export const ExtractedDatesCalendar = ({ extractedDocuments }: Props) => {
         isSameDay(extraction.date, activeStartDate)
       )
     );
+
+  const openLatestExtractedDate = () => {
+    const latestExtractedDate = getLatestExtractedDate();
+    if (!latestExtractedDate) {
+      return;
+    }
+
+    setCurrentDate(latestExtractedDate);
+    updateModalDetails(latestExtractedDate);
+    setIsModalOpen(true);
+  };
 
   const getOldestExtractedDate = () => {
     const dates = getFlattenedExtractedDates();

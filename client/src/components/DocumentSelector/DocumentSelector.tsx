@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DeleteOutlined } from "@ant-design/icons";
 import Dropzone from "react-dropzone";
 import "./DocumentSelector.css";
 
@@ -16,6 +17,12 @@ export const DocumentSelector = ({ onFilesChanged, extractedCount }: Props) => {
       (file) => !selectedFiles.some((f) => f.name === file.name)
     );
     const newSelectedFiles = [...selectedFiles, ...newFiles];
+    setSelectedFiles(newSelectedFiles);
+    onFilesChanged(newSelectedFiles);
+  };
+
+  const handleFileRemoved = (file: File) => {
+    const newSelectedFiles = selectedFiles.filter((f) => f.name !== file.name);
     setSelectedFiles(newSelectedFiles);
     onFilesChanged(newSelectedFiles);
   };
@@ -67,6 +74,13 @@ export const DocumentSelector = ({ onFilesChanged, extractedCount }: Props) => {
               <span className="text-sm font-bold">
                 {extractedCount?.[file.name] !== undefined &&
                   getExtractedCountLabel(extractedCount?.[file.name])}
+
+                <DeleteOutlined
+                  className="ml-4"
+                  onClick={() => {
+                    handleFileRemoved(file);
+                  }}
+                />
               </span>
             </div>
           ))}
