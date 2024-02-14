@@ -35,9 +35,9 @@ npm run dev
 
 ```bash
 # Build the image
-docker build -t pdf-date-extractor .
+docker build -t pdf-date-extractor-client .
 # Run the container
-docker run -p 8000:8000 pdf-date-extractor
+docker run -p 3000:3000 pdf-date-extractor-client
 ```
 
 ### (Optional) Compile for deployment
