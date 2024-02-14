@@ -1,7 +1,7 @@
 import re
 from dateutil import parser
-from app.models.parsed_pdf import ParsedPDF
-from app.models.extracted_date import ExtractedDate, ExtractedDateSnippet
+from ..models.parsed_pdf import ParsedPDF
+from ..models.extracted_date import ExtractedDate, ExtractedDateSnippet
 
 extraction_rules = [
     # YYYY-MM-DD

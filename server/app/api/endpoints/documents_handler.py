@@ -1,8 +1,8 @@
 from fastapi import UploadFile
 from config import settings
-from app.parser.date_extractor import dates_from_pdf
-from app.parser.pdf_parser import parse_pdf
-from app.models.parsed_pdf import ParsedPDF
+from ...parser.date_extractor import dates_from_pdf
+from ...parser.pdf_parser import parse_pdf
+from ...models.parsed_pdf import ParsedPDF
 
 
 def handle_request(files: list[UploadFile]):

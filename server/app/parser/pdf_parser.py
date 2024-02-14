@@ -1,5 +1,5 @@
 from pypdf import PdfReader
-from app.models.parsed_pdf import ParsedPDF
+from ..models.parsed_pdf import ParsedPDF
 
 
 def parse_pdf(pdf_path: str) -> ParsedPDF:

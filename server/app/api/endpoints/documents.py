@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, UploadFile
-from app.api.endpoints.documents_handler import handle_request
+from .documents_handler import handle_request
 
 router = APIRouter()
 
