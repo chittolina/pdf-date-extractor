@@ -3,7 +3,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 360px;
+
+  padding: 0 8px;
 }
 
 .document-extractor-container > div {
