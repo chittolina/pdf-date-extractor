@@ -2,6 +2,19 @@
 
 This is the front-end folder of the PDF date extractor.
 
+src/
+├── assets/
+│ └── fonts - Font used in the project
+├── components/
+│ ├── DocumentExtractor - Main page for date extraction
+│ ├── DocumentSelector - Component to select PDF files
+│ ├── ExtractedDatesCalendar - Component to render the calendar with extracted dates
+│ ├── Button - Custom button implementation
+│ └── ErrorAlert - Component to show an error indication in case the API fails
+├── services/
+│ └── documents - Abstraction wrapper around the /documents API
+└── utils - Utilitary functions
+
 ## Local development
 
 ### Install dependencies using `npm`
