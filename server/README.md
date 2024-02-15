@@ -4,11 +4,10 @@ This is the back-end folder of the PDF Date Extractor.
 
 ```bash
 app/
-└── api/
-    ├── api/
-    │   └── endpoints - Route definition and handlers
-    ├── models - Data models used in the API
-    └── parser - Functions for PDF Parsing and date extraction
+├── api/
+│   └── endpoints - Route definition and handlers
+├── models - Data models used in the API
+└── parser - Functions for PDF Parsing and date extraction  
 examples - Sample PDFs for testing.
 uploads - Uploaded files live here.
 ```
